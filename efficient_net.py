@@ -54,8 +54,6 @@ class MBConv(nn.Module):
     """Mobile inverted bottleneck convolutional module with squeeze-and-excitation optimization"""
     def __init__(self, ni, nf, ks, s, exp):
         super().__init__()
-        self.ni = ni
-        self.nf = nf
         self.exp = exp 
         self.resblock = s == 1 and ni == nf
         if exp != 1:
