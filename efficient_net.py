@@ -16,13 +16,13 @@ class Swish(nn.Module):
     
 class SELayer(nn.Module):
     """Squeeze and Excitation Layer"""
-    def __init__(self, nf, sqeeze=0.25):
+    def __init__(self, n_filters, sqeeze=0.25):
         super().__init__()
         self.avg_pool = nn.AdaptiveAvgPool2d(1)
         self.sqeeze_expand = nn.Sequential(
-            nn.Conv2d(nf, int(nf*sqeeze), 1, stride=1, bias=False),
+            nn.Conv2d(n_filters, int(n_filters*sqeeze), 1, stride=1, bias=False),
             Swish(),
-            nn.Conv2d(int(nf*sqeeze), nf, 1, stride=1, bias=False),
+            nn.Conv2d(int(n_filters*sqeeze), n_filters, 1, stride=1, bias=False),
             nn.Sigmoid()
         )
 
