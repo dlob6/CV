@@ -20,9 +20,9 @@ class SELayer(nn.Module):
         super().__init__()
         self.sqeeze_expand = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(n_filters, int(n_filters*sqeeze), 1, stride=1, bias=False),
+            nn.Conv2d(n_filters, int(n_filters*sqeeze), 1, stride=1, bias=True),
             Swish(),
-            nn.Conv2d(int(n_filters*sqeeze), n_filters, 1, stride=1, bias=False),
+            nn.Conv2d(int(n_filters*sqeeze), n_filters, 1, stride=1, bias=True),
             nn.Sigmoid())
 
     def forward(self, x):
