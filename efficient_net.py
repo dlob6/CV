@@ -19,15 +19,14 @@ class SELayer(nn.Module):
     def __init__(self, n_filters, sqeeze=0.25):
         super().__init__()
         self.sqeeze_expand = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1)
+            nn.AdaptiveAvgPool2d(1),
             nn.Conv2d(n_filters, int(n_filters*sqeeze), 1, stride=1, bias=False),
             Swish(),
             nn.Conv2d(int(n_filters*sqeeze), n_filters, 1, stride=1, bias=False),
             nn.Sigmoid())
 
     def forward(self, x):
-        y = self.sqeeze_expand(x)
-        return x * y
+        return x * self.sqeeze_expand(x)
 
 def conv_layer(n_in_filters, n_filters, ker_size, stride=1, 
                depthwise=False, zero_bn=False, act=True) :
