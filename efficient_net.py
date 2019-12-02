@@ -33,19 +33,11 @@ def conv_layer(n_in_filters, n_filters, ker_size, stride=1,
     """Conv layer followed by batchnorm and possibly Swish activation"""
     bn = nn.BatchNorm2d(n_filters)
     nn.init.constant_(bn.weight, 0. if zero_bn else 1.)
-    if act:
-        return nn.Sequential(
-                nn.Conv2d(n_in_filters, n_filters, ker_size, stride=stride,
-                          padding=ker_size//2, bias=False,
-                          groups = n_in_filters if depthwise else 1), 
-                bn,
-                Swish())
-    else:
-        return nn.Sequential(
-                nn.Conv2d(n_in_filters, n_filters, ker_size, stride=stride,
-                          padding=ker_size//2,bias=False,
-                          groups= n_in_filters if depthwise else 1), 
-                bn)
+    conv = nn.Conv2d(n_in_filters, n_filters, ker_size, stride=stride,padding=ker_size//2, 
+                     bias=False,groups = n_in_filters if depthwise else 1)
+    layer = [conv, bn]
+    if act: layer += [Swish()]
+    return nn.Sequential(*layer)
 
 class MBConv(nn.Module):
     """Mobile inverted bottleneck convolutional module with squeeze-and-excitation optimization"""
